@@ -1,0 +1,20 @@
+{% extends 'home/base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="container">
+	<div class="row">
+		<br><br>
+		<div class="col m6 card-panel white offset-m3" style="text-align:center">
+				<h1>Student Portal NIT DGP</h1>
+				<h4>Sign in to access all the facilities</h4>
+				<br>
+				<a href="{% url 'social:begin' 'google-oauth2' %}?next=/">
+					<img id="signInButton" src="{% static 'account/images/btn_google_signin_dark_normal_web.png' %}" onclick="document.getElementById('signInButton').src='{% static 'account/images/btn_google_signin_dark_pressed_web.png' %}'">
+				</a>
+				<br>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from gdstorage.storage import GoogleDriveStorage
+gd_storage = GoogleDriveStorage()
+
+class Profile(models.Model):
+    user = models.OneToOneField(User,unique=True, null=False, db_index=True)
+    bio = models.TextField(max_length=500, blank=True)
+    location = models.CharField(max_length=30, blank=True)
+    birth_date = models.DateField(null=True, blank=True)
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
+class Map(models.Model):
+    id = models.AutoField( primary_key=True)
+    map_name = models.CharField(max_length=200)
+    map_data = models.FileField(upload_to='maps', storage=gd_storage)
